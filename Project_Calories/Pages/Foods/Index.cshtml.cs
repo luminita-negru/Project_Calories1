@@ -25,7 +25,8 @@ namespace Project_Calories.Pages.Foods
         {
             if (_context.Food != null)
             {
-                Food = await _context.Food.ToListAsync();
+                Food = await _context.Food
+                .Include(f => f.Categorie).ToListAsync();
             }
         }
     }

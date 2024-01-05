@@ -36,8 +36,8 @@ namespace Project_Calories.Pages.MealItems
                 return NotFound();
             }
             MealItem = mealitem;
-           ViewData["FoodId"] = new SelectList(_context.Food, "FoodId", "FoodId");
-           ViewData["MealId"] = new SelectList(_context.Meal, "MealId", "MealId");
+           ViewData["FoodId"] = new SelectList(_context.Food, "FoodId", "Name");
+           ViewData["MealId"] = new SelectList(_context.Meal, "MealId", "Name");
             return Page();
         }
 

@@ -19,7 +19,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Food[0].Calories)
             </th>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Food[0].Categorie.Name)
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -31,6 +33,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Calories)
             </td>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Categorie.Name)
+                </th>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.FoodId">Edit</a> |
                 <a asp-page="./Details" asp-route-id="@item.FoodId">Details</a> |

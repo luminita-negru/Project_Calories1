@@ -21,6 +21,7 @@ namespace Project_Calories.Pages.Foods
 
         public IActionResult OnGet()
         {
+            ViewData["CategorieId"] = new SelectList(_context.Categorie, "CategorieId", "Name");
             return Page();
         }
 
