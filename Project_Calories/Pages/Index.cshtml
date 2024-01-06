@@ -4,6 +4,37 @@
     ViewData["Title"] = "Home";
 }
 
+<style>
+    /* Add the CSS styles directly in the <style> tag */
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f2f2f2; /* Light gray background */
+        color: #333; /* Dark text color */
+    }
+
+    h1, h2 {
+        color: #4CAF50; /* Dominant green color for headers */
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    li {
+        margin-bottom: 10px;
+        padding: 8px;
+        background-color: #dff0d8; /* Light green background for list items */
+        border-radius: 5px;
+        transition: background-color 0.3s ease; /* Smooth transition on hover */
+    }
+
+        li:hover {
+            background-color: #5cb85c; /* Darker green background on hover */
+            color: #fff; /* White text color on hover */
+        }
+</style>
+
 <h1>Welcome to Your Calorie Tracker!</h1>
 
 <p>Hello, @User.Identity.Name!</p>
@@ -13,8 +44,34 @@
 
 <h2>Calories per Meal:</h2>
 <ul>
-    @foreach (var kvp in Model.CaloriesPerMeal)
-    {
-        <li>@kvp.Key: @kvp.Value</li>
-    }
+        @if (Model.CaloriesPerMeal != null)
+        {
+            @foreach (var kvp in Model.CaloriesPerMeal)
+            {
+            <li>@kvp.Key: @kvp.Value</li>
+            }
+        }
+        else
+        {
+        <li>No data available</li>
+        }
 </ul>
+
+<script>
+    // Add the JavaScript directly in the <script> tag
+    document.addEventListener("DOMContentLoaded", function () {
+        // Example: Add a click event to change the color of the headers on click
+        document.querySelector('h1').addEventListener('click', function () {
+            this.style.color = '#3F7E44'; // Darker shade of green
+        });
+
+        // Example: Add a click event to toggle the color of list items
+        var listItems = document.querySelectorAll('li');
+        listItems.forEach(function (item) {
+            item.addEventListener('click', function () {
+                this.style.backgroundColor = this.style.backgroundColor === '#5cb85c' ? '#dff0d8' : '#5cb85c';
+                this.style.color = this.style.color === '#fff' ? '#333' : '#fff';
+            });
+        });
+    });
+</script>

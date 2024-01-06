@@ -1,11 +1,11 @@
-﻿using System;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Project_Calories.Data; // Assuming this is your DbContext namespace
+using Project_Calories.Data;
 using Project_Calories.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Project_Calories.Pages
 {
@@ -25,32 +25,61 @@ namespace Project_Calories.Pages
 
         public async Task OnGetAsync()
         {
-            // Retrieve the current user
-            CurrentUser = await _context.Member.FirstOrDefaultAsync(m => m.Email == User.Identity.Name);
+            try
+            {
+                // Retrieve the current user
+                CurrentUser = await _context.Member.FirstOrDefaultAsync(m => m.Email == User.Identity.Name);
 
-            // Calculate total calories consumed
-            TotalCaloriesConsumed = await _context.MealItem
-                .Where(item => item.MemberId == CurrentUser.MemberId && item.Date.Date == DateTime.Today)
-                .SumAsync(item => item.Quantity * item.Food.Calories);
+                if (CurrentUser != null)
+                {
+                    // Calculate total calories consumed
+                    var mealItemsQuery = _context.MealItem
+                        .Where(item => item.MemberId == CurrentUser.MemberId && item.Date.Date == DateTime.Today);
 
-            // Get calories goal
-            CaloriesGoal = CurrentUser.CaloriesGoal;
+                    if (mealItemsQuery != null)
+                    {
+                        var totalCaloriesQuery = mealItemsQuery.Select(item => item.Quantity * item.Food.Calories);
+                        TotalCaloriesConsumed = totalCaloriesQuery.Any() ? await totalCaloriesQuery.SumAsync() : 0;
+                    }
+                    else
+                    {
+                        // Log an error or handle the situation where mealItemsQuery is null
+                    }
 
-            // Fetch meal items for the current user and date
-            var mealItems = await _context.MealItem
-                .Include(item => item.Meal)
-                .Include(item => item.Food)
-                .Where(item => item.MemberId == CurrentUser.MemberId && item.Date.Date == DateTime.Today)
-                .ToListAsync();
+                    // Get calories goal
+                    CaloriesGoal = CurrentUser.CaloriesGoal;
 
-            // Calculate calories per meal using client-side evaluation
-            CaloriesPerMeal = mealItems
-                .GroupBy(item => item.Meal.Name)
-                .ToDictionary(
-                    group => group.Key,
-                    group => group.Sum(item => item.Quantity * item.Food.Calories)
-                );
+                    // Fetch meal items for the current user and date
+                    var mealItems = await _context.MealItem
+                        .Include(item => item.Meal)
+                        .Include(item => item.Food)
+                        .Where(item => item.MemberId == CurrentUser.MemberId && item.Date.Date == DateTime.Today)
+                        .ToListAsync();
+
+                    // Calculate calories per meal using client-side evaluation
+                    CaloriesPerMeal = mealItems
+                        .GroupBy(item => item.Meal?.Name)
+                        .ToDictionary(
+                            group => group.Key,
+                            group => group.Sum(item => item.Quantity * (item.Food?.Calories ?? 0))
+                        );
+
+                    // Ensure that CaloriesPerMeal is not null
+                    CaloriesPerMeal ??= new Dictionary<string, int>();
+                }
+                else
+                {
+                    // Log an error or handle the situation where CurrentUser is null
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception for further analysis
+                // You can use logging frameworks like Serilog, NLog, or just Console.WriteLine
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
         }
+
     }
 }
 
