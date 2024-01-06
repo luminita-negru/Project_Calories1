@@ -2,64 +2,54 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Project_Calories.Data; // Assuming this is your DbContext namespace
+using Project_Calories.Models;
 
 namespace Project_Calories.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
-        private readonly Project_CaloriesContext _context; // Assuming ApplicationDbContext is your DbContext
+        private readonly Project_CaloriesContext _context;
 
-        public IndexModel(ILogger<IndexModel> logger, Project_CaloriesContext context)
+        public IndexModel(Project_CaloriesContext context)
         {
-            _logger = logger;
             _context = context;
         }
 
-        public void OnGet()
+        public Member CurrentUser { get; set; }
+        public int TotalCaloriesConsumed { get; set; }
+        public int CaloriesGoal { get; set; }
+        public Dictionary<string, int> CaloriesPerMeal { get; set; }
+
+        public async Task OnGetAsync()
         {
-            // Get the current user's member ID (you may need to implement user authentication)
-            int memberId = GetCurrentMemberId(); // Implement this method as per your authentication mechanism
+            // Retrieve the current user
+            CurrentUser = await _context.Member.FirstOrDefaultAsync(m => m.Email == User.Identity.Name);
 
-            // Get the current user's calorie goal
-            var calorieGoal = _context.Member.Where(m => m.MemberId == memberId).Select(m => m.CaloriesGoal).FirstOrDefault();
+            // Calculate total calories consumed
+            TotalCaloriesConsumed = await _context.MealItem
+                .Where(item => item.MemberId == CurrentUser.MemberId && item.Date.Date == DateTime.Today)
+                .SumAsync(item => item.Quantity * item.Food.Calories);
 
-            // Get statistics for the current user
-            var lunchCalories = GetTotalCaloriesForMealType(memberId, "Lunch");
-            var breakfastCalories = GetTotalCaloriesForMealType(memberId, "Breakfast");
-            var snacksCalories = GetTotalCaloriesForMealType(memberId, "Snacks");
+            // Get calories goal
+            CaloriesGoal = CurrentUser.CaloriesGoal;
 
-            // Calculate remaining calories for the day
-            var remainingCalories = calorieGoal - (lunchCalories + breakfastCalories + snacksCalories);
+            // Fetch meal items for the current user and date
+            var mealItems = await _context.MealItem
+                .Include(item => item.Meal)
+                .Include(item => item.Food)
+                .Where(item => item.MemberId == CurrentUser.MemberId && item.Date.Date == DateTime.Today)
+                .ToListAsync();
 
-            // You can now pass these values to the view using ViewData or a ViewModel
-            ViewData["CalorieGoal"] = calorieGoal;
-            ViewData["LunchCalories"] = lunchCalories;
-            ViewData["BreakfastCalories"] = breakfastCalories;
-            ViewData["SnacksCalories"] = snacksCalories;
-            ViewData["RemainingCalories"] = remainingCalories;
-        }
-
-        private int GetCurrentMemberId()
-        {
-            // Implement your logic to get the current user's member ID
-            // This could be based on user authentication
-            // For example, if you are using ASP.NET Identity, you might do something like:
-            // return _userManager.GetUserId(User);
-            return 1; // Placeholder value, replace with your implementation
-        }
-
-        private int GetTotalCaloriesForMealType(int memberId, string mealType)
-        {
-            // Implement your logic to get the total calories for a specific meal type
-            // This involves querying the MealItem and related tables
-            // You can use LINQ to perform the necessary calculations
-            // For example:
-            return _context.MealItem
-                .Where(mi => mi.MemberId == memberId && mi.Meal.Name == mealType)
-                .Sum(mi => mi.Food.Calories);
+            // Calculate calories per meal using client-side evaluation
+            CaloriesPerMeal = mealItems
+                .GroupBy(item => item.Meal.Name)
+                .ToDictionary(
+                    group => group.Key,
+                    group => group.Sum(item => item.Quantity * item.Food.Calories)
+                );
         }
     }
 }
