@@ -4,11 +4,39 @@
 @{
     ViewData["Title"] = "Delete";
 }
+<style>
+    .container {
+        margin-top: 20px;
+    }
+
+    h1 {
+        color: #FF0000; /* Rosu */
+    }
+
+    h3 {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .row {
+        margin-top: 20px;
+    }
+
+    .btn-delete {
+        margin-top: 20px;
+        margin-right: 10px;
+    }
+
+    .btn-back {
+        margin-top: 20px;
+    }
+</style>
 
 <h1>Delete</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Are you sure you want to delete this user?</h3>
 <div>
+    <!--
     <h4>Member</h4>
     <hr />
     <dl class="row">
@@ -43,10 +71,12 @@
             @Html.DisplayFor(model => model.Member.Phone)
         </dd>
     </dl>
-    
+    -->
     <form method="post">
         <input type="hidden" asp-for="Member.MemberId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-page="./Index">Back to List</a>
+        <a asp-page="./Index" class="btn btn-success">
+            <i class="fa fa-plus"></i> Back to List
+        </a>
     </form>
 </div>

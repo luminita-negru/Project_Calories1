@@ -2,26 +2,59 @@
 @model Project_Calories.Pages.Foods.IndexModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Food";
 }
+<style>
+    .container {
+        margin-top: 20px;
+    }
 
-<h1>Index</h1>
+    h1 {
+        color: #4CAF50; /* Verde inchis */
+    }
 
-<p>
-    <a asp-page="Create">Create New</a>
-</p>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        border: 1px solid #4CAF50;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+       background-color: black; /* Verde inchis */
+        color: #4CAF50;
+    }
+
+    a {
+        text-decoration: none;
+        color: #007bff; /* Albastru deschis */
+    }
+
+        a:hover {
+            text-decoration: underline;
+        }
+</style>
+
+<div class="container">
+    <h1>Food List</h1>
+
+    <p>
+        <a asp-page="Create" class="btn btn-success">
+            <i class="fa fa-plus"></i> Create New
+        </a>
+    </p>
+
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Food[0].Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Food[0].Calories)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Food[0].Categorie.Name)
-            </th>
+            <th>Food Name</th>
+            <th>Calories</th>
+            <th>Categorie Name</th>
         </tr>
     </thead>
     <tbody>
@@ -33,15 +66,15 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Calories)
             </td>
-                <th>
-                    @Html.DisplayFor(modelItem => item.Categorie.Name)
-                </th>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.FoodId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.FoodId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.FoodId">Delete</a>
+                 @Html.DisplayFor(modelItem => item.Categorie.Name)
+            </td>
+            <td>
+                        <a asp-page="./Edit" class="btn btn-primary" asp-route-id="@item.FoodId">Edit</a> 
+                        <!---<a asp-page="./Details" class="btn btn-primary" asp-route-id="@item.FoodId">Details</a> -->
+                        <a asp-page="./Delete" class="btn btn-danger" asp-route-id="@item.FoodId">Delete</a>
             </td>
         </tr>
-}
+            }
     </tbody>
 </table>

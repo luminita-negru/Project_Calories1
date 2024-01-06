@@ -4,5 +4,7 @@
     {
         public int CategorieId { get; set; }
         public string Name { get; set; }
+        
+        public ICollection<Food>? Foods { get; set; }
     }
 }

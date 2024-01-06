@@ -4,10 +4,44 @@
 @{
     ViewData["Title"] = "Edit";
 }
+<style>
+    .container {
+        margin-top: 20px;
+    }
 
-<h1>Edit</h1>
+    h1 {
+        color: #4CAF50; /* Verde inchis */
+    }
 
-<h4>Food</h4>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        border: 1px solid #4CAF50;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: black; /* Verde inchis */
+        color: #4CAF50;
+    }
+
+    a {
+        text-decoration: none;
+        color: #007bff; /* Albastru deschis */
+    }
+
+        a:hover {
+            text-decoration: underline;
+        }
+</style>
+
+<div class="container">
+    <h1>Food Edit</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -15,19 +49,19 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Food.FoodId" />
             <div class="form-group">
-                <label asp-for="Food.Name" class="control-label"></label>
+                <label asp-for="Food.Name" class="control-label">Food Name</label>
                 <input asp-for="Food.Name" class="form-control" />
                 <span asp-validation-for="Food.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Food.Calories" class="control-label"></label>
+                <label asp-for="Food.Calories" class="control-label">Food Calories</label>
                 <input asp-for="Food.Calories" class="form-control" />
                 <span asp-validation-for="Food.Calories" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Food.Categorie.Name" class="control-label"></label>
-                <select asp-for="Food.Categorie.Name" class="form-control" asp-items="ViewBag.CategorieId"></select>
-                <span asp-validation-for="Food.Categorie.Name" class="text-danger"></span>
+                <label asp-for="Food.CategorieId" class="control-label">Food Categories</label>
+                <select asp-for="Food.CategorieId" class="form-control" asp-items="ViewBag.CategorieId"></select>
+                <span asp-validation-for="Food.CategorieId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -37,7 +71,9 @@
 </div>
 
 <div>
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="./Index" class="btn btn-success">
+            <i class="fa fa-plus"></i> Back to List
+        </a>
 </div>
 
 @section Scripts {
