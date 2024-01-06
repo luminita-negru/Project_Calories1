@@ -55,6 +55,7 @@ namespace Project_Calories.Pages.Foods
                 Food = food;
                 _context.Food.Remove(Food);
                 await _context.SaveChangesAsync();
+
             }
 
             return RedirectToPage("./Index");

@@ -4,27 +4,47 @@
 @{
     ViewData["Title"] = "Create";
 }
+<style>
+    .container {
+        margin-top: 20px;
+    }
 
-<h1>Create</h1>
+    h1 {
+        color: #4CAF50; /* Verde inchis */
+    }
 
-<h4>Food</h4>
+    h4 {
+        margin-top: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .btn-back {
+        margin-top: 20px;
+    }
+</style>
+
+<div class="container">
+    <h1>Create</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Food.Name" class="control-label"></label>
+                <label asp-for="Food.Name" class="control-label">Food Name</label>
                 <input asp-for="Food.Name" class="form-control" />
                 <span asp-validation-for="Food.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Food.Calories" class="control-label"></label>
+                <label asp-for="Food.Calories" class="control-label">Food Calories</label>
                 <input asp-for="Food.Calories" class="form-control" />
                 <span asp-validation-for="Food.Calories" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Food.CategorieId" class="control-label"></label>
+                <label asp-for="Food.CategorieId" class="control-label">Food Categorie</label>
                 <select asp-for="Food.CategorieId" class="form-control" asp-items="ViewBag.CategorieId"></select>
             </div>
             <div class="form-group">
@@ -35,7 +55,10 @@
 </div>
 
 <div>
-    <a asp-page="Index">Back to List</a>
+    <a asp-page="Index" class="btn btn-success">
+        <i class="fa fa-plus"></i> Back to List
+    </a>
+
 </div>
 
 @section Scripts {

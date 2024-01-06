@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -23,6 +24,7 @@ namespace Project_Calories.Pages.Foods
         [BindProperty]
         public Food Food { get; set; } = default!;
 
+    
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null || _context.Food == null)
@@ -30,13 +32,17 @@ namespace Project_Calories.Pages.Foods
                 return NotFound();
             }
 
-            var food =  await _context.Food.FirstOrDefaultAsync(m => m.FoodId == id);
+            var food = await _context.Food
+                .Include(f => f.Categorie)  // Asigurați-vă că încărcați categoria
+                .FirstOrDefaultAsync(m => m.FoodId == id);
+
             if (food == null)
             {
                 return NotFound();
             }
+
             Food = food;
-            ViewData["CategorieId"] = new SelectList(_context.Categorie, "CategorieId", "Name");
+            ViewData["CategorieId"] = new SelectList(_context.Set<Categorie>(), "CategorieId", "Name");
             return Page();
         }
 
@@ -69,6 +75,7 @@ namespace Project_Calories.Pages.Foods
 
             return RedirectToPage("./Index");
         }
+
 
         private bool FoodExists(int id)
         {

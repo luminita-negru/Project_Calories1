@@ -4,10 +4,42 @@
 @{
     ViewData["Title"] = "Edit";
 }
+<style>
+    .container {
+        margin-top: 20px;
+    }
 
-<h1>Edit</h1>
+    h4 {
+        color: #4CAF50; /* Verde inchis */
+    }
 
-<h4>Member</h4>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        border: 1px solid #4CAF50;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: black; /* Verde inchis */
+        color: #4CAF50;
+    }
+
+    a {
+        text-decoration: none;
+        color: #007bff; /* Albastru deschis */
+    }
+
+        a:hover {
+            text-decoration: underline;
+        }
+</style>
+<h4>User Edit</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -47,7 +79,9 @@
 </div>
 
 <div>
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="./Index" class="btn btn-success">
+        <i class="fa fa-plus"></i> Back to List
+    </a>
 </div>
 
 @section Scripts {
