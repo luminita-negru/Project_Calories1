@@ -4,7 +4,56 @@
     ViewData["Title"] = "Home page";
 }
 
+<style>
+    /* Add your custom styles here */
+    .statistics-container {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 20px;
+    }
+
+    .statistic-card {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin: 10px;
+        text-align: center;
+        width: 150px;
+    }
+</style>
+
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    <div class="statistics-container">
+        <div class="statistic-card">
+            <p>Calorie Goal</p>
+            <p>@ViewData["CalorieGoal"]</p>
+        </div>
+
+        <div class="statistic-card">
+            <p>Lunch Calories</p>
+            <p>@ViewData["LunchCalories"]</p>
+        </div>
+
+        <div class="statistic-card">
+            <p>Breakfast Calories</p>
+            <p>@ViewData["BreakfastCalories"]</p>
+        </div>
+
+        <div class="statistic-card">
+            <p>Snacks Calories</p>
+            <p>@ViewData["SnacksCalories"]</p>
+        </div>
+
+        <div class="statistic-card">
+            <p>Remaining Calories</p>
+            <p>@ViewData["RemainingCalories"]</p>
+        </div>
+    </div>
 </div>
+
+<script>
+    // Add your JavaScript for interactivity here
+    // For example, you can use JavaScript to animate the statistics or add event listeners
+</script>

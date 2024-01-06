@@ -20,5 +20,7 @@ namespace Project_Calories.Models
         public string? Phone { get; set; }
         [Display(Name = "Full Name")] public string? FullName { get { return FirstName + " " + LastName; } }
         public ICollection<MealItem>? MealItem { get; set; }
+
+        public int CaloriesGoal {  get; set; }
     }
 }
