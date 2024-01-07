@@ -25,9 +25,10 @@ namespace Project_Calories.Pages.MealItems
         public string FoodSort { get; set; }
         public string MealSort { get; set; }
         public string DateSort { get; set; }
+        //
+        public string CurrentFilter { get; set; }
 
-
-        public async Task OnGetAsync(string sortOrder)
+        public async Task OnGetAsync(string sortOrder, string searchString)
         {
             //
             FoodSort = String.IsNullOrEmpty(sortOrder) ? "food_desc" : "";
@@ -39,6 +40,17 @@ namespace Project_Calories.Pages.MealItems
                 MealItem = await _context.MealItem
                 .Include(m => m.Food)
                 .Include(m => m.Meal).ToListAsync();
+            }
+
+            //
+            CurrentFilter = searchString;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                MealItem = MealItem.Where(s => s.Food.Name.Contains(searchString)
+                    || s.Meal.Name.Contains(searchString)
+                    || s.Date.ToString().Contains(searchString))
+                    .ToList();
             }
             //
             switch (sortOrder)

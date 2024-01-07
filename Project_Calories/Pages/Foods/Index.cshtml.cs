@@ -23,8 +23,11 @@ namespace Project_Calories.Pages.Foods
 
         public string FoodSort { get; set; }
         public string CategorieSort { get; set; }
+        //
+        public string CurrentFilter { get; set; }
 
-        public async Task OnGetAsync(string sortOrder)
+
+        public async Task OnGetAsync(string sortOrder, string searchString)
         {
             //
             FoodSort = String.IsNullOrEmpty(sortOrder) ? "food_desc" : "";
@@ -35,6 +38,13 @@ namespace Project_Calories.Pages.Foods
                 .Include(f => f.Categorie).ToListAsync();
             }
 
+            CurrentFilter = searchString;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                Food = Food.Where(s => s.Name.Contains(searchString)
+                    || s.Categorie.Name.Contains(searchString))
+                    .ToList();
+            }
             //
             switch (sortOrder)
             {
