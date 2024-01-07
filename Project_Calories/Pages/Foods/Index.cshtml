@@ -52,9 +52,9 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Food Name</th>
-            <th>Calories</th>
-            <th>Categorie Name</th>
+                <th><a asp-page="./Index" asp-route-sortOrder="@Model.FoodSort">Food Name</a></th>
+                <th>Calories</th>
+                <th><a asp-page="./Index" asp-route-sortOrder="@Model.CategorieSort">Categorie Name</a></th>
         </tr>
     </thead>
     <tbody>
