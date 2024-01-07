@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -35,16 +36,23 @@ namespace Project_Calories.Pages.MealItems
 
         [BindProperty]
         public MealItem MealItem { get; set; } = default!;
-        
+
+        public Member CurrentUser { get; set; }
+
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid || _context.MealItem == null || MealItem == null)
+            CurrentUser = await _context.Member.FirstOrDefaultAsync(m => m.Email == User.Identity.Name);
+            if(CurrentUser == null)
+            {
+                throw new Exception();
+            }
+            if (!ModelState.IsValid || _context.MealItem == null || MealItem == null)
             {
                 return Page();
             }
-
+            MealItem.MemberId = CurrentUser.MemberId;
             _context.MealItem.Add(MealItem);
             await _context.SaveChangesAsync();
 

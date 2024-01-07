@@ -8,7 +8,7 @@
     /* Add the CSS styles directly in the <style> tag */
     body {
         font-family: 'Arial', sans-serif;
-        background-color: #f2f2f2; /* Light gray background */
+        background-color: lightgreen; /* Light gray background */
         color: #333; /* Dark text color */
     }
 
@@ -38,6 +38,14 @@
 <h1>Welcome to Your Calorie Tracker!</h1>
 
 <p>Hello, @User.Identity.Name!</p>
+
+<form method="get">
+    <div class="form-group">
+        <label for="SelectedDate">Select Date:</label>
+        <input type="date" class="form-control" id="SelectedDate" name="SelectedDate" value="@Model.SelectedDate.ToString("yyyy-MM-dd")" />
+    </div>
+    <button type="submit" class="btn btn-primary">Show Calories</button>
+</form>
 
 <p>Total Calories Consumed Today: @Model.TotalCaloriesConsumed</p>
 <p>Calories Goal: @Model.CaloriesGoal</p>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Project_Calories.Data;
 using Project_Calories.Models;
@@ -18,6 +19,9 @@ namespace Project_Calories.Pages
             _context = context;
         }
 
+        [BindProperty(SupportsGet = true)]
+        public DateTime SelectedDate { get; set; }
+
         public Member CurrentUser { get; set; }
         public int TotalCaloriesConsumed { get; set; }
         public int CaloriesGoal { get; set; }
@@ -32,36 +36,33 @@ namespace Project_Calories.Pages
 
                 if (CurrentUser != null)
                 {
+                    // Use SelectedDate or default to today if not provided
+                    var queryDate = SelectedDate != DateTime.MinValue ? SelectedDate.Date : DateTime.Today.Date;
+
                     // Calculate total calories consumed
                     var mealItemsQuery = _context.MealItem
-                        .Where(item => item.MemberId == CurrentUser.MemberId && item.Date.Date == DateTime.Today);
+                        .Include(item => item.Food)
+                        .Include(item => item.Meal)
+                        .Where(item => item.MemberId == CurrentUser.MemberId && item.Date.Date == queryDate);
 
                     if (mealItemsQuery != null)
                     {
-                        var totalCaloriesQuery = mealItemsQuery.Select(item => item.Quantity * item.Food.Calories);
+                        var totalCaloriesQuery = mealItemsQuery.Select(item => item.Quantity * (item.Food != null ? item.Food.Calories : 0));
                         TotalCaloriesConsumed = totalCaloriesQuery.Any() ? await totalCaloriesQuery.SumAsync() : 0;
-                    }
-                    else
-                    {
-                        // Log an error or handle the situation where mealItemsQuery is null
                     }
 
                     // Get calories goal
                     CaloriesGoal = CurrentUser.CaloriesGoal;
 
                     // Fetch meal items for the current user and date
-                    var mealItems = await _context.MealItem
-                        .Include(item => item.Meal)
-                        .Include(item => item.Food)
-                        .Where(item => item.MemberId == CurrentUser.MemberId && item.Date.Date == DateTime.Today)
-                        .ToListAsync();
+                    var mealItems = await mealItemsQuery.ToListAsync();
 
                     // Calculate calories per meal using client-side evaluation
                     CaloriesPerMeal = mealItems
                         .GroupBy(item => item.Meal?.Name)
                         .ToDictionary(
                             group => group.Key,
-                            group => group.Sum(item => item.Quantity * (item.Food?.Calories ?? 0))
+                            group => group.Sum(item => item.Quantity * (item.Food != null ? item.Food.Calories : 0))
                         );
 
                     // Ensure that CaloriesPerMeal is not null
@@ -75,11 +76,8 @@ namespace Project_Calories.Pages
             catch (Exception ex)
             {
                 // Log the exception for further analysis
-                // You can use logging frameworks like Serilog, NLog, or just Console.WriteLine
                 Console.WriteLine($"An error occurred: {ex.Message}");
             }
         }
-
     }
 }
-
