@@ -13,11 +13,12 @@
         color: #4CAF50; /* Verde inchis */
     }
 
-    table {
+    table{
         width: 100%;
         border-collapse: collapse;
         margin-top: 20px;
     }
+
 
     th, td {
         border: 1px solid #4CAF50;
@@ -48,13 +49,27 @@
             <i class="fa fa-plus"></i> Create New
         </a>
     </p>
+    <form asp-page="./Index" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Find by Food / Categorie:
+                <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+                <input type="submit" value="Search" class="btn btn-primary" /> 
+                <a asp-page="./Index" class="btn btn-success">
+                    <i class="fa fa-plus"></i> Back to List
+                </a>
+            </p>
+        </div>
+    </form>
+
+
 
 <table class="table">
     <thead>
         <tr>
-            <th>Food Name</th>
-            <th>Calories</th>
-            <th>Categorie Name</th>
+                <th><a asp-page="./Index" asp-route-sortOrder="@Model.FoodSort">Food Name</a></th>
+                <th>Calories</th>
+                <th><a asp-page="./Index" asp-route-sortOrder="@Model.CategorieSort">Categorie Name</a></th>
         </tr>
     </thead>
     <tbody>

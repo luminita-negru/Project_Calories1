@@ -50,13 +50,26 @@
         </a>
     </p>
 
+    <form asp-page="./Index" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Find by Food / Meal / Date:
+                <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+                <input type="submit" value="Search" class="btn btn-primary" /> 
+                <a asp-page="./Index" class="btn btn-success">
+                    <i class="fa fa-plus"></i> Back to List
+                </a>
+            </p>
+        </div>
+    </form>
+
 <table class="table">
     <thead>
         <tr>
-            <th>Meal </th>
-            <th>Food </th>
-            <th>Quantity</th>
-            <th>Date </th>
+                <th><a asp-page="./Index" asp-route-sortOrder="@Model.FoodSort">Food</a></th>
+                <th><a asp-page="./Index" asp-route-sortOrder="@Model.MealSort">Meal</a></th>
+                <th>Quantity</th>
+                <th><a asp-page="./Index" asp-route-sortOrder="@Model.DateSort">Date</a>
             <th></th>
         </tr>
     </thead>

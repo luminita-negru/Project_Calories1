@@ -21,12 +21,45 @@ namespace Project_Calories.Pages.Foods
 
         public IList<Food> Food { get;set; } = default!;
 
-        public async Task OnGetAsync()
+        public string FoodSort { get; set; }
+        public string CategorieSort { get; set; }
+        //
+        public string CurrentFilter { get; set; }
+
+
+        public async Task OnGetAsync(string sortOrder, string searchString)
         {
+            //
+            FoodSort = String.IsNullOrEmpty(sortOrder) ? "food_desc" : "";
+            CategorieSort = sortOrder == "categorie" ? "categorie_desc" : "categorie";
             if (_context.Food != null)
             {
                 Food = await _context.Food
                 .Include(f => f.Categorie).ToListAsync();
+            }
+
+            CurrentFilter = searchString;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                Food = Food.Where(s => s.Name.Contains(searchString)
+                    || s.Categorie.Name.Contains(searchString))
+                    .ToList();
+            }
+            //
+            switch (sortOrder)
+            {
+                case "food_desc":
+                    Food = Food.OrderByDescending(s => s.Name).ToList();
+                    break;
+                case "categorie_desc":
+                    Food = Food.OrderByDescending(s => s.Categorie.Name).ToList();
+                    break;
+                case "categorie":
+                    Food = Food.OrderBy(s => s.Categorie.Name).ToList();
+                    break;
+                default:
+                    Food = Food.OrderBy(s => s.Name).ToList();
+                    break;
             }
         }
     }
