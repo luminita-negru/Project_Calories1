@@ -1,10 +1,6 @@
 ﻿@page
 @model Project_Calories.Pages.MealItems.IndexModel
 
-@{
-    ViewData["Title"] = "Meal Item ";
-}
-
 <style>
     .container {
         margin-top: 20px;
@@ -12,6 +8,17 @@
 
     h1 {
         color: #4CAF50; /* Verde inchis */
+    }
+
+    .table-container {
+        max-height: 400px; /* Set your desired maximum height */
+        overflow-y: auto;
+        border: 1px solid #b2d8b2; /* Border color for the rectangle */
+        border-radius: 5px; /* Border radius for rounded corners */
+        border-top-width: 10px;
+        border-bottom-width: 10px;
+        border-left-width: 10px;
+        margin-top: 20px; /* Additional margin for spacing */
     }
 
     table {
@@ -55,7 +62,7 @@
             <p>
                 Find by Food / Meal / Date:
                 <input type="text" name="SearchString" value="@Model.CurrentFilter" />
-                <input type="submit" value="Search" class="btn btn-primary" /> 
+                <input type="submit" value="Search" class="btn btn-primary" />
                 <a asp-page="./Index" class="btn btn-success">
                     <i class="fa fa-plus"></i> Back to List
                 </a>
@@ -63,37 +70,41 @@
         </div>
     </form>
 
-<table class="table">
-    <thead>
-        <tr>
-                <th><a asp-page="./Index" asp-route-sortOrder="@Model.FoodSort">Food</a></th>
-                <th><a asp-page="./Index" asp-route-sortOrder="@Model.MealSort">Meal</a></th>
-                <th>Quantity</th>
-                <th><a asp-page="./Index" asp-route-sortOrder="@Model.DateSort">Date</a>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.MealItem) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Meal.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Food.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Date)
-                </td>
-            <td>
-                    <a asp-page="./Edit" class="btn btn-primary" asp-route-id="@item.MealItemId">Edit</a>
-                    <!---<a asp-page="./Details" class="btn btn-primary" asp-route-id="@item.MealItemId">Details</a> -->
-                    <a asp-page="./Delete" class="btn btn-danger" asp-route-id="@item.MealItemId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th><a asp-page="./Index" asp-route-sortOrder="@Model.FoodSort">Food</a></th>
+                    <th><a asp-page="./Index" asp-route-sortOrder="@Model.MealSort">Meal</a></th>
+                    <th>Quantity</th>
+                    <th><a asp-page="./Index" asp-route-sortOrder="@Model.DateSort">Date</a></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.MealItem)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Meal.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Food.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Quantity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td>
+                            <a asp-page="./Edit" class="btn btn-primary" asp-route-id="@item.MealItemId">Edit</a>
+                            <!---<a asp-page="./Details" class="btn btn-primary" asp-route-id="@item.MealItemId">Details</a> -->
+                            <a asp-page="./Delete" class="btn btn-danger" asp-route-id="@item.MealItemId">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

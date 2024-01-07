@@ -1,43 +1,55 @@
 ﻿@page
 @model Project_Calories.Pages.Members.IndexModel
 
-@{
-    ViewData["Title"] = "Index";
-}<style>
-     .container {
-         margin-top: 20px;
-     }
+<style>
+    .container {
+        margin-top: 20px;
+    }
 
-     h1 {
-         color: #4CAF50; /* Verde inchis */
-     }
+    h1 {
+        color: #4CAF50; /* Verde inchis */
+    }
 
-     table {
-         width: 100%;
-         border-collapse: collapse;
-         margin-top: 20px;
-     }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
 
-     th, td {
-         border: 1px solid #4CAF50;
-         padding: 8px;
-         text-align: left;
-     }
+    th, td {
+        border: 1px solid #4CAF50;
+        padding: 8px;
+        text-align: left;
+    }
 
-     th {
-         background-color: black; /* Verde inchis */
-         color: #4CAF50;
-     }
+    th {
+        background-color: black; /* Verde inchis */
+        color: #4CAF50;
+    }
 
-     a {
-         text-decoration: none;
-         color: #007bff; /* Albastru deschis */
-     }
+    a {
+        text-decoration: none;
+        color: #007bff; /* Albastru deschis */
+    }
 
-         a:hover {
-             text-decoration: underline;
-         }
+        a:hover {
+            text-decoration: underline;
+        }
+
+    /* Add the following styles for the scroll bar */
+    .table-container {
+        max-height: 400px; /* Set your desired maximum height */
+        overflow-y: auto;
+        border: 1px solid #b2d8b2; /* Border color for the rectangle */
+        border-radius: 5px; /* Border radius for rounded corners */
+        border-top-width:10px;
+        border-bottom-width:10px;
+  
+        border-left-width:10px;
+        margin-top: 20px; /* Additional margin for spacing */
+    }
 </style>
+
 <h1>Members List</h1>
 
 <p>
@@ -45,51 +57,55 @@
         <i class="fa fa-plus"></i> Create New
     </a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Member[0].FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Member[0].LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Member[0].Address)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Member[0].Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Member[0].Phone)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Member) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phone)
-            </td>
-            <td>
-                    <a asp-page="./Edit" class="btn btn-primary" asp-route-id="@item.MemberId">Edit</a>
-                    <!---<a asp-page="./Details" class="btn btn-primary" asp-route-id="@item.MemberId">Details</a> -->
-                    <a asp-page="./Delete" class="btn btn-danger" asp-route-id="@item.MemberId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+<div class="table-container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Member[0].FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Member[0].LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Member[0].Address)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Member[0].Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Member[0].Phone)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Member)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Phone)
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" class="btn btn-primary" asp-route-id="@item.MemberId">Edit</a>
+                        <!---<a asp-page="./Details" class="btn btn-primary" asp-route-id="@item.MemberId">Details</a> -->
+                        <a asp-page="./Delete" class="btn btn-danger" asp-route-id="@item.MemberId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

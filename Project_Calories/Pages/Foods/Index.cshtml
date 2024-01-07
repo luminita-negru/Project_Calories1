@@ -1,9 +1,6 @@
 ﻿@page
 @model Project_Calories.Pages.Foods.IndexModel
 
-@{
-    ViewData["Title"] = "Food";
-}
 <style>
     .container {
         margin-top: 20px;
@@ -13,12 +10,22 @@
         color: #4CAF50; /* Verde inchis */
     }
 
-    table{
+    .table-container {
+        max-height: 400px; /* Set your desired maximum height */
+        overflow-y: auto;
+        border: 1px solid #b2d8b2; /* Border color for the rectangle */
+        border-radius: 5px; /* Border radius for rounded corners */
+        border-top-width: 10px;
+        border-bottom-width: 10px;
+        border-left-width: 10px;
+        margin-top: 20px; /* Additional margin for spacing */
+    }
+
+    table {
         width: 100%;
         border-collapse: collapse;
         margin-top: 20px;
     }
-
 
     th, td {
         border: 1px solid #4CAF50;
@@ -27,7 +34,7 @@
     }
 
     th {
-       background-color: black; /* Verde inchis */
+        background-color: black; /* Verde inchis */
         color: #4CAF50;
     }
 
@@ -49,12 +56,13 @@
             <i class="fa fa-plus"></i> Create New
         </a>
     </p>
+
     <form asp-page="./Index" method="get">
         <div class="form-actions no-color">
             <p>
                 Find by Food / Categorie:
                 <input type="text" name="SearchString" value="@Model.CurrentFilter" />
-                <input type="submit" value="Search" class="btn btn-primary" /> 
+                <input type="submit" value="Search" class="btn btn-primary" />
                 <a asp-page="./Index" class="btn btn-success">
                     <i class="fa fa-plus"></i> Back to List
                 </a>
@@ -62,34 +70,37 @@
         </div>
     </form>
 
-
-
-<table class="table">
-    <thead>
-        <tr>
-                <th><a asp-page="./Index" asp-route-sortOrder="@Model.FoodSort">Food Name</a></th>
-                <th>Calories</th>
-                <th><a asp-page="./Index" asp-route-sortOrder="@Model.CategorieSort">Categorie Name</a></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Food) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Calories)
-            </td>
-            <td>
-                 @Html.DisplayFor(modelItem => item.Categorie.Name)
-            </td>
-            <td>
-                        <a asp-page="./Edit" class="btn btn-primary" asp-route-id="@item.FoodId">Edit</a> 
-                        <!---<a asp-page="./Details" class="btn btn-primary" asp-route-id="@item.FoodId">Details</a> -->
-                        <a asp-page="./Delete" class="btn btn-danger" asp-route-id="@item.FoodId">Delete</a>
-            </td>
-        </tr>
-            }
-    </tbody>
-</table>
+    <div class="table-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th><a asp-page="./Index" asp-route-sortOrder="@Model.FoodSort">Food Name</a></th>
+                    <th>Calories</th>
+                    <th><a asp-page="./Index" asp-route-sortOrder="@Model.CategorieSort">Categorie Name</a></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Food)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Calories)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Categorie.Name)
+                        </td>
+                        <td>
+                            <a asp-page="./Edit" class="btn btn-primary" asp-route-id="@item.FoodId">Edit</a>
+                            <!---<a asp-page="./Details" class="btn btn-primary" asp-route-id="@item.FoodId">Details</a> -->
+                            <a asp-page="./Delete" class="btn btn-danger" asp-route-id="@item.FoodId">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
